@@ -1,4 +1,38 @@
-# checks if one a string is didifferent from another
+compute_hash <- function(file_path) {
+  digest(file = file_path, algo = "md5")
+}
+
+try_compute_hash <- function(path) {
+    result <- try(compute_hash(path))
+    if (inherits(result, "try-error")) {
+        return("missing")
+    } else {
+        return(result)
+    }
+}
+
+
+create_df <- function(folder_a_path, folder_b_path, folder_c_path){
+    files_a <- list.files(folder_a_path, recursive = TRUE)
+    files_b <- list.files(folder_b_path, recursive = TRUE)
+    files_c <- list.files(folder_c_path, recursive = TRUE)
+    tot_items <- unique(c(files_a, files_b, files_c))
+    df <- data.frame(files=tot_items, folder_a=NA, folder_b=NA, folder_c=NA)
+    return(df)
+}
+
+
+
+
+fill_hash <- function(df, folder_a_path, folder_b_path, folder_c_path){
+    for(n in 1:nrow(df)){
+            df$folder_a[n] <- try_compute_hash(paste0(folder_a_path, df$files[n]))
+            df$folder_b[n] <- try_compute_hash(paste0(folder_b_path, df$files[n]))
+            df$folder_c[n] <- try_compute_hash(paste0(folder_c_path, df$files[n]))
+    }
+    return(df)
+}
+
 check_3_strings <- function(string_a, string_b, string_c){
     if(string_a == string_b & string_a == string_c){
         return(NA)
@@ -12,30 +46,3 @@ check_3_strings <- function(string_a, string_b, string_c){
         return("all")
     }
 }
-
-# creates a hash string from a file
-compute_hash <- function(file_path) {
-  digest(file = file_path, algo = "md5")
-}
-
-# check filenames and folders for disrepancies [spelling?]
-check_folders_length <- function(path_a, path_b, path_c){
-    files_a <- list.files(folder_a_path)
-    files_b <- list.files(folder_b_path)
-    files_c <- list.files(folder_c_path)
-    a <- length(files_a) == length(files_b)
-    b <- length(files_a) == length(files_c)
-    c <- a & b
-    return(c)
-}
-
-check_folders_filenames <- function(folder_a_path, folder_b_path, folder_c_path){
-    content_a <- list.files(folder_c_path) %>% paste0(collapse = " ")
-    content_b <- list.files(folder_c_path) %>% paste0(collapse = " ")
-    content_c <- list.files(folder_c_path) %>% paste0(collapse = " ")
-    a <- content_a == content_b
-    b <- content_a == content_c
-    c <- a & b
-    return(c)
-}
-
