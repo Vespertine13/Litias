@@ -54,7 +54,16 @@ overview$folder_c_ok <- overview$max_hash == overview$folder_c
 overview
 
 # coded from phone
-overview$shell_cmd <- NA
+# plan: one source per file, create path  # randomly from either viable location.
+# one column per folder for shell commands
+# loop though each and insert relevant cmd # when needed.
+# then lastly run shell conmands to 
+# cp files
+
+overview$shell_cmd_a <- NA
+overview$shell_cmd_a <- NA
+overview$shell_cmd_a <- NA
+
 source_folder <- folder_with # must be determined in the algorith above
 source <- paste0(source_folder, overview$filename[n])
 
