@@ -52,3 +52,13 @@ overview$folder_b_ok <- overview$max_hash == overview$folder_b
 overview$folder_c_ok <- overview$max_hash == overview$folder_c
 
 overview
+
+# coded from phone
+overview$shell_cmd <- NA
+source_folder <- folder_with # must be determined in the algorith above
+source <- paste0(source_folder, overview$filename[n])
+
+target_folder <- folder_without # how does one solve multiple folders without?
+target <- paste0(target_folder, overview$filename[n])
+# copy file
+shell_cmd <- glue("cp {source} {target}")
