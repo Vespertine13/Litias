@@ -82,7 +82,7 @@ get_overview <- function(df){
     match_a <- df$folder_a == df$max_hash
     match_b <- df$folder_b == df$max_hash
     match_c <- df$folder_c == df$max_hash
-    overview <- data.frame(files = freq_df$files,
+    overview <- data.frame(files = df$files,
                            a = match_a, 
                            b = match_b, 
                            c = match_c)
@@ -92,7 +92,7 @@ get_overview <- function(df){
 plot_overview <- function(df){
     plot_df <- melt(df, id.vars = "files")
 
-    if(FALSE %in% unlist(to_plot)){
+    if(FALSE %in% unlist(df)){
         fig <- ggplot(plot_df, aes(x = variable,
                                    y = files,
                                    fill = as.factor(value))) +
@@ -113,8 +113,10 @@ plot_overview <- function(df){
 
 run_shells  <- function(df){
     for(i in 1:nrow(df)){
-        if(!is.na(df$shell_cmd_a[i])){shell(paste0(df$shell_cmd_a[i], "/y /i /f"))}
-        if(!is.na(df$shell_cmd_b[i])){shell(paste0(df$shell_cmd_b[i], "/y /i /f"))}
-        if(!is.na(df$shell_cmd_c[i])){shell(paste0(df$shell_cmd_c[i], "/y /i /f"))}
+        if(df$n_max_hash[i] > 1){
+            if(!is.na(df$shell_cmd_a[i])){shell(paste0(df$shell_cmd_a[i], "/y /i /f"))}
+            if(!is.na(df$shell_cmd_b[i])){shell(paste0(df$shell_cmd_b[i], "/y /i /f"))}
+            if(!is.na(df$shell_cmd_c[i])){shell(paste0(df$shell_cmd_c[i], "/y /i /f"))}
+        }else(print(glue("check file {df$files[i]}")))
     }
 }
