@@ -49,19 +49,6 @@ fill_hash <- function(df, folder_a_path, folder_b_path, folder_c_path){
     return(df)
 }
 
-check_3_strings <- function(string_a, string_b, string_c){
-    if(string_a == string_b & string_a == string_c){
-        return(NA)
-    }else if(string_b != string_c & string_a == string_b){
-        return("c")
-    }else if(string_a != string_b & string_b == string_c){
-        return("a")
-    }else if(string_a != string_b & string_a == string_c){
-        return("b")
-    }else{
-        return("all")
-    }
-}
 
 create_shell_cmd <- function(df){
     df$shell_cmd_a <- NA
@@ -88,6 +75,41 @@ create_shell_cmd <- function(df){
     df$shell_cmd_c <- gsub("/", "\\\\", df$shell_cmd_c)
     return(df)
 }
+
+
+
+get_overview <- function(df){
+    match_a <- df$folder_a == df$max_hash
+    match_b <- df$folder_b == df$max_hash
+    match_c <- df$folder_c == df$max_hash
+    overview <- data.frame(files = freq_df$files,
+                           a = match_a, 
+                           b = match_b, 
+                           c = match_c)
+    return(overview)
+}
+
+plot_overview <- function(df){
+    plot_df <- melt(df, id.vars = "files")
+
+    if(FALSE %in% unlist(to_plot)){
+        fig <- ggplot(plot_df, aes(x = variable,
+                                   y = files,
+                                   fill = as.factor(value))) +
+            geom_tile() + 
+            labs(x = "Folder", fill = "File OK") +
+            scale_fill_manual(values = c("red", "green"))
+    }else{
+        fig <- ggplot(plot_df, aes(x = variable,
+                                   y = files,
+                                   fill = as.factor(value))) +
+            geom_tile() + 
+            labs(x = "Folder", fill = "File OK") +
+            scale_fill_manual(values = c("green", "red"))
+    }
+    return(fig)
+}
+
 
 run_shells  <- function(df){
     for(i in 1:nrow(df)){

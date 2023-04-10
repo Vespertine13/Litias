@@ -3,6 +3,7 @@
 library(digest)
 library(tidyverse)
 library(glue)
+library(reshape2)
 
 # source functions
 source("funcs.R")
@@ -20,7 +21,10 @@ overview <- fill_hash(folders_df, folder_a_path, folder_b_path, folder_c_path)
 
 freq_df <- calculate_hash_freq(overview)
 
+
+to_plot <- get_overview(freq_df)
+plot_overview(to_plot)
 shell_df <- create_shell_cmd(freq_df)
 
-run_shells(shell_df)
+# run_shells(shell_df)
 
