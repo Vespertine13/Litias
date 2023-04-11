@@ -14,9 +14,7 @@ print("Done")
 print("------------------------------------------------------------")
 
 # paths to different folders
-folder_a_path <- "e:/folder_a/"
-folder_b_path <- "e:/folder_b/"
-folder_c_path <- "e:/folder_c/"
+source("config.R")
 print("Current folders")
 print(folder_a_path)
 print(folder_b_path)
