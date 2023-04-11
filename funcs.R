@@ -28,6 +28,7 @@ calculate_hash_freq <- function(df){
     hash_df[hash_df == "missing"] <- NA
     max_hash <- rep(NA, nrow(hash_df))
     n_max_hash <- rep(NA, nrow(hash_df))
+    all_diff <- rep(NA, nrow(hash_df))
     for(i in 1:nrow(hash_df)){
         table_i <- hash_df[i,] %>% as.character() %>% table()
         max_hash[i] <- names(table_i)[which.max(table_i)]
@@ -41,11 +42,14 @@ calculate_hash_freq <- function(df){
 
 
 fill_hash <- function(df, folder_a_path, folder_b_path, folder_c_path){
+    pb <- txtProgressBar(min = 0, max = nrow(df), style = 3)
     for(n in 1:nrow(df)){
             df$folder_a[n] <- try_compute_hash(paste0(folder_a_path, df$files[n]))
             df$folder_b[n] <- try_compute_hash(paste0(folder_b_path, df$files[n]))
             df$folder_c[n] <- try_compute_hash(paste0(folder_c_path, df$files[n]))
+            setTxtProgressBar(pb, n)
     }
+    close(pb)
     return(df)
 }
 
@@ -59,20 +63,23 @@ create_shell_cmd <- function(df){
         source <- paste0(get(paste0(folder_source, "_path")), df$files[n])
         if(df$folder_a[n] != df$max_hash[n]){
             target <- paste0(folder_a_path, df$files[n])
-            df$shell_cmd_a[n] <- glue("xcopy {source} {target}")
+            df$shell_cmd_a[n] <- glue("xcopy '{source}' '{target}'")
         }
         if(df$folder_b[n] != df$max_hash[n]){
             target <- paste0(folder_b_path, df$files[n])
-            df$shell_cmd_b[n] <- glue("xcopy {source} {target}")
+            df$shell_cmd_b[n] <- glue("xcopy '{source}' '{target}'")
         }
         if(df$folder_c[n] != df$max_hash[n]){
             target <- paste0(folder_c_path, df$files[n])
-            df$shell_cmd_c[n] <- glue("xcopy {source} {target}")
+            df$shell_cmd_c[n] <- glue("xcopy '{source}' '{target}'")
         }
     }
     df$shell_cmd_a <- gsub("/", "\\\\", df$shell_cmd_a)
     df$shell_cmd_b <- gsub("/", "\\\\", df$shell_cmd_b)
     df$shell_cmd_c <- gsub("/", "\\\\", df$shell_cmd_c)
+    df$shell_cmd_a[df$n_max_hash == 1] <- NA
+    df$shell_cmd_b[df$n_max_hash == 1] <- NA
+    df$shell_cmd_c[df$n_max_hash == 1] <- NA
     return(df)
 }
 
@@ -82,6 +89,9 @@ get_overview <- function(df){
     match_a <- df$folder_a == df$max_hash
     match_b <- df$folder_b == df$max_hash
     match_c <- df$folder_c == df$max_hash
+    match_a[df$n_max_hash == 1] <- FALSE
+    match_b[df$n_max_hash == 1] <- FALSE
+    match_c[df$n_max_hash == 1] <- FALSE
     overview <- data.frame(files = df$files,
                            a = match_a, 
                            b = match_b, 
@@ -113,10 +123,8 @@ plot_overview <- function(df){
 
 run_shells  <- function(df){
     for(i in 1:nrow(df)){
-        if(df$n_max_hash[i] > 1){
-            if(!is.na(df$shell_cmd_a[i])){shell(paste0(df$shell_cmd_a[i], "/y /i /f"))}
-            if(!is.na(df$shell_cmd_b[i])){shell(paste0(df$shell_cmd_b[i], "/y /i /f"))}
-            if(!is.na(df$shell_cmd_c[i])){shell(paste0(df$shell_cmd_c[i], "/y /i /f"))}
-        }else(print(glue("check file {df$files[i]}")))
+        if(!is.na(df$shell_cmd_a[i])){shell(paste0(df$shell_cmd_a[i], " /y /i /f"))}
+        if(!is.na(df$shell_cmd_b[i])){shell(paste0(df$shell_cmd_b[i], " /y /i /f"))}
+        if(!is.na(df$shell_cmd_c[i])){shell(paste0(df$shell_cmd_c[i], " /y /i /f"))}
     }
 }
