@@ -38,7 +38,7 @@ print("Done")
 
 n_broken <- sum(shell_df$n_max_hash == 1)
 print(glue("Number of broken or new files: {n_broken}"))
-print(shell_df$files[shell_df$n_max_hash == 1])
+if(sum(shell_df$n_max_hash == 1) >0){print(shell_df$files[shell_df$n_max_hash == 1])}
 
 total_cmd <- sum(!is.na(shell_df$shell_cmd_a)) + 
     sum(!is.na(shell_df$shell_cmd_b)) + 
