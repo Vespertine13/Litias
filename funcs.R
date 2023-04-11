@@ -28,13 +28,16 @@ calculate_hash_freq <- function(df){
     hash_df[hash_df == "missing"] <- NA
     max_hash <- rep(NA, nrow(hash_df))
     n_max_hash <- rep(NA, nrow(hash_df))
+    all_diff <- rep(NA, nrow(hash_df))
     for(i in 1:nrow(hash_df)){
         table_i <- hash_df[i,] %>% as.character() %>% table()
         max_hash[i] <- names(table_i)[which.max(table_i)]
         n_max_hash[i] <- table_i %>% as.numeric() %>% max()
+        all_diff[i] <- all(df$folder_a[i] != df$folder_b[i], df$folder_a[i] != df$folder_c[i], df$folder_b[i] != df$folder_c[i])
     }
     df$max_hash <- max_hash
     df$n_max_hash <- n_max_hash
+    df$all_diff <- all_diff
     return(df)
 }
 
