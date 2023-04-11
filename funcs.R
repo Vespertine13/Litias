@@ -1,3 +1,4 @@
+
 compute_hash <- function(file_path) {
   digest(file = file_path, algo = "md5")
 }
@@ -63,15 +64,15 @@ create_shell_cmd <- function(df){
         source <- paste0(get(paste0(folder_source, "_path")), df$files[n])
         if(df$folder_a[n] != df$max_hash[n]){
             target <- paste0(folder_a_path, df$files[n])
-            df$shell_cmd_a[n] <- glue("xcopy '{source}' '{target}'")
+            df$shell_cmd_a[n] <- glue('xcopy "{source}" "{target}"')
         }
         if(df$folder_b[n] != df$max_hash[n]){
             target <- paste0(folder_b_path, df$files[n])
-            df$shell_cmd_b[n] <- glue("xcopy '{source}' '{target}'")
+            df$shell_cmd_b[n] <- glue('xcopy "{source}" "{target}"')
         }
         if(df$folder_c[n] != df$max_hash[n]){
             target <- paste0(folder_c_path, df$files[n])
-            df$shell_cmd_c[n] <- glue("xcopy '{source}' '{target}'")
+            df$shell_cmd_c[n] <- glue('xcopy "{source}" "{target}"')
         }
     }
     df$shell_cmd_a <- gsub("/", "\\\\", df$shell_cmd_a)
