@@ -33,11 +33,9 @@ calculate_hash_freq <- function(df){
         table_i <- hash_df[i,] %>% as.character() %>% table()
         max_hash[i] <- names(table_i)[which.max(table_i)]
         n_max_hash[i] <- table_i %>% as.numeric() %>% max()
-        all_diff[i] <- all(df$folder_a[i] != df$folder_b[i], df$folder_a[i] != df$folder_c[i], df$folder_b[i] != df$folder_c[i])
     }
     df$max_hash <- max_hash
     df$n_max_hash <- n_max_hash
-    df$all_diff <- all_diff
     return(df)
 }
 
@@ -88,6 +86,9 @@ get_overview <- function(df){
     match_a <- df$folder_a == df$max_hash
     match_b <- df$folder_b == df$max_hash
     match_c <- df$folder_c == df$max_hash
+    match_a[df$n_max_hash == 1] <- FALSE
+    match_b[df$n_max_hash == 1] <- FALSE
+    match_c[df$n_max_hash == 1] <- FALSE
     overview <- data.frame(files = df$files,
                            a = match_a, 
                            b = match_b, 
