@@ -7,3 +7,4 @@ TODOS:
 - skip the F or D prompt
 - differentiate between "all different" and "new file"
 - write tests
+- copy cmd does not overwrite
