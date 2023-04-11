@@ -41,11 +41,14 @@ calculate_hash_freq <- function(df){
 
 
 fill_hash <- function(df, folder_a_path, folder_b_path, folder_c_path){
+    pb <- txtProgressBar(min = 0, max = nrow(df), style = 3)
     for(n in 1:nrow(df)){
             df$folder_a[n] <- try_compute_hash(paste0(folder_a_path, df$files[n]))
             df$folder_b[n] <- try_compute_hash(paste0(folder_b_path, df$files[n]))
             df$folder_c[n] <- try_compute_hash(paste0(folder_c_path, df$files[n]))
+            setTxtProgressBar(pb, n)
     }
+    close(pb)
     return(df)
 }
 
