@@ -78,9 +78,9 @@ create_shell_cmd <- function(df){
     df$shell_cmd_a <- gsub("/", "\\\\", df$shell_cmd_a)
     df$shell_cmd_b <- gsub("/", "\\\\", df$shell_cmd_b)
     df$shell_cmd_c <- gsub("/", "\\\\", df$shell_cmd_c)
-    df$shell_cmd_a[df$n_max_hash == 1] <- NA
-    df$shell_cmd_b[df$n_max_hash == 1] <- NA
-    df$shell_cmd_c[df$n_max_hash == 1] <- NA
+    df$shell_cmd_a[df$n_max_hash == 1 & df$folder_a != "missing"] <- NA
+    df$shell_cmd_b[df$n_max_hash == 1 & df$folder_b != "missing"] <- NA
+    df$shell_cmd_c[df$n_max_hash == 1 & df$folder_c != "missing"] <- NA
     return(df)
 }
 
@@ -124,8 +124,8 @@ plot_overview <- function(df){
 
 run_shells  <- function(df){
     for(i in 1:nrow(df)){
-        if(!is.na(df$shell_cmd_a[i])){shell(paste0(df$shell_cmd_a[i], " /y /i /f"))}
-        if(!is.na(df$shell_cmd_b[i])){shell(paste0(df$shell_cmd_b[i], " /y /i /f"))}
-        if(!is.na(df$shell_cmd_c[i])){shell(paste0(df$shell_cmd_c[i], " /y /i /f"))}
+        if(!is.na(df$shell_cmd_a[i])){shell(paste0(df$shell_cmd_a[i], " /Y /F"))}
+        if(!is.na(df$shell_cmd_b[i])){shell(paste0(df$shell_cmd_b[i], " /Y /F"))}
+        if(!is.na(df$shell_cmd_c[i])){shell(paste0(df$shell_cmd_c[i], " /Y /F"))}
     }
 }
