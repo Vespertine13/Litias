@@ -14,9 +14,9 @@ print("Done")
 print("------------------------------------------------------------")
 
 # paths to different folders
-folder_a_path <- "~/mega/folder_a/"
-folder_b_path <- "~/mega/folder_b/"
-folder_c_path <- "~/mega/folder_c/"
+folder_a_path <- "c:/Users/ekb/folder_a/"
+folder_b_path <- "c:/Users/ekb/folder_b/"
+folder_c_path <- "c:/Users/ekb/folder_c/"
 print("Current folders")
 print(folder_a_path)
 print(folder_b_path)
@@ -26,7 +26,7 @@ print("------------------------------------------------------------")
 
 folders <- c("folder_a", "folder_b", "folder_c")
 folders_df <- create_df(folder_a_path, folder_b_path, folder_c_path)
-print("Calculating Hash values")
+print("Calculating hash values")
 overview <- fill_hash(folders_df, folder_a_path, folder_b_path, folder_c_path)
 freq_df <- calculate_hash_freq(overview)
 print("Done")
@@ -37,8 +37,8 @@ shell_df <- create_shell_cmd(freq_df)
 print("Done")
 
 n_broken <- sum(shell_df$n_max_hash == 1)
-print(glue("Number of broken files: {n_broken}"))
-print(shell_df$files[shell_df$n_max_hash == 1])
+print(glue("Number of broken or new files: {n_broken}"))
+if(sum(shell_df$n_max_hash == 1) >0){print(shell_df$files[shell_df$n_max_hash == 1])}
 
 total_cmd <- sum(!is.na(shell_df$shell_cmd_a)) + 
     sum(!is.na(shell_df$shell_cmd_b)) + 
