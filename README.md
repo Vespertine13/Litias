@@ -2,6 +2,7 @@
 
 TODOS:
 - Support for any number of paths
-- progress bar
+- support for filenames with spaces
+- support for tilde ~ paths
 - skip the F or D prompt
 - differentiate between "all different" and "new file"
