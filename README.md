@@ -1,4 +1,4 @@
-# verisync
+# Litias
 
 TODOS:
 - Support for any number of paths
@@ -6,3 +6,4 @@ TODOS:
 - support for tilde ~ paths
 - skip the F or D prompt
 - differentiate between "all different" and "new file"
+- write tests
