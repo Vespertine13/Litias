@@ -1,5 +1,5 @@
 # Litias
-Programs that verify file integrity given three redundant folders.
+Scripts that verify file integrity given three redundant folders.
 
 TODOS:
 - Support for any number of paths
