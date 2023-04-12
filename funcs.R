@@ -37,6 +37,8 @@ calculate_hash_freq <- function(df){
     }
     df$max_hash <- max_hash
     df$n_max_hash <- n_max_hash
+    df <- check_broken_file(df)
+    df <- check_new_file(df)
     return(df)
 }
 
@@ -79,13 +81,29 @@ create_shell_cmd <- function(df){
     df$shell_cmd_a <- gsub("/", "\\\\", df$shell_cmd_a)
     df$shell_cmd_b <- gsub("/", "\\\\", df$shell_cmd_b)
     df$shell_cmd_c <- gsub("/", "\\\\", df$shell_cmd_c)
-    df$shell_cmd_a[df$n_max_hash == 1 & df$folder_a != "missing"] <- NA
-    df$shell_cmd_b[df$n_max_hash == 1 & df$folder_b != "missing"] <- NA
-    df$shell_cmd_c[df$n_max_hash == 1 & df$folder_c != "missing"] <- NA
+    df$shell_cmd_a[df$broken_file] <- NA
+    df$shell_cmd_b[df$broken_file] <- NA
+    df$shell_cmd_c[df$broken_file] <- NA
     return(df)
 }
 
+check_new_file <- function(df){
+    df$new_file <- FALSE
+    folder_idx <- colnames(df) %>% grep(pattern ="folder_")
+    for(i in 1:nrow(df)){
+        if(sum(df[i, folder_idx] == "missing") == 2){df$new_file[i] <- TRUE}
+    }
+    return(df)
+}
 
+check_broken_file <- function(df){
+    df$broken_file <- FALSE
+    folder_idx <- colnames(df) %>% grep(pattern ="folder_")
+    for(i in 1:nrow(df)){
+        if(sum(df[i, folder_idx] == "missing") == 0 & df$n_max_hash[i] == 1){df$broken_file[i] <- TRUE}
+    }
+    return(df)
+}
 
 get_overview <- function(df){
     match_a <- df$folder_a == df$max_hash
@@ -95,6 +113,7 @@ get_overview <- function(df){
                            a = match_a, 
                            b = match_b, 
                            c = match_c)
+
     return(overview)
 }
 

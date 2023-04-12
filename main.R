@@ -29,14 +29,22 @@ overview <- fill_hash(folders_df, folder_a_path, folder_b_path, folder_c_path)
 freq_df <- calculate_hash_freq(overview)
 print("Done")
 
+
+
 plot_df <- get_overview(freq_df)
 print("Generating Shell Commands")
 shell_df <- create_shell_cmd(freq_df)
 print("Done")
 
-n_broken <- sum(shell_df$n_max_hash == 1)
-print(glue("Number of broken or new files: {n_broken}"))
-if(sum(shell_df$n_max_hash == 1) >0){print(shell_df$files[shell_df$n_max_hash == 1])}
+n_broken <- sum(shell_df$broken_file)
+print(glue("Number of broken files: {n_broken}"))
+if(sum(shell_df$broken_file) >0){print(shell_df$files[shell_df$broken_file])}
+
+n_new <- sum(shell_df$new_file)
+print(glue("Number of new files: {n_new}"))
+
+if(sum(shell_df$new_file) >0){print(shell_df$files[shell_df$new_file])}
+
 
 total_cmd <- sum(!is.na(shell_df$shell_cmd_a)) + 
     sum(!is.na(shell_df$shell_cmd_b)) + 
