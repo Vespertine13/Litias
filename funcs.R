@@ -1,8 +1,10 @@
 
+# Compute the MD5 hash of a file
 compute_hash <- function(file_path) {
   digest(file = file_path, algo = "md5")
 }
 
+# To compute the hash for a file at a given path and handle any errors that may occur,  you can call the "try_compute_hash" function and pass the file path as an argument, The "hash_result" variable will either contain the hash computed for the file, or the string "missing" if an error occurred during the computation.
 try_compute_hash <- function(path) {
     result <- try(compute_hash(path))
     if (inherits(result, "try-error")) {
@@ -13,6 +15,15 @@ try_compute_hash <- function(path) {
 }
 
 
+
+# This R function "create_df" takes three arguments: "folder_a_path", 
+# "folder_b_path", and "folder_c_path", which are the paths to three 
+# different folders. The function uses the "list.files" function to 
+# obtain a list of all the files in each of these folders, recursively
+# (i.e., it includes all subdirectories). It then combines these three
+# lists of files, removing any duplicates, and creates an empty data 
+# frame with columns for "files", "folder_a", "folder_b", and "folder_c". 
+# Finally, the function returns this data frame.
 create_df <- function(folder_a_path, folder_b_path, folder_c_path){
     files_a <- list.files(folder_a_path, recursive = TRUE)
     files_b <- list.files(folder_b_path, recursive = TRUE)
@@ -22,7 +33,9 @@ create_df <- function(folder_a_path, folder_b_path, folder_c_path){
     return(df)
 }
 
-# uses loop
+# Calculates the frequency of hash values for each folder in the input 
+# data frame and adds the maximum hash value and its frequency to each 
+# row of the data frame.
 calculate_hash_freq <- function(df){
     folder_idx <- colnames(df) %>% grep(pattern ="folder_")
     hash_df <- df[,folder_idx]
@@ -37,14 +50,10 @@ calculate_hash_freq <- function(df){
     }
     df$max_hash <- max_hash
     df$n_max_hash <- n_max_hash
-    df <- check_broken_file(df)
-    df <- check_new_file(df)
     return(df)
 }
 
-
-
-fill_hash <- function(df, folder_a_path, folder_b_path, folder_c_path){
+fill_hash <- function(df){
     pb <- txtProgressBar(min = 0, max = nrow(df), style = 3)
     for(n in 1:nrow(df)){
             df$folder_a[n] <- try_compute_hash(paste0(folder_a_path, df$files[n]))
@@ -55,8 +64,6 @@ fill_hash <- function(df, folder_a_path, folder_b_path, folder_c_path){
     close(pb)
     return(df)
 }
-
-
 
 create_shell_cmd <- function(df){
     df$shell_cmd_a <- NA
@@ -87,6 +94,12 @@ create_shell_cmd <- function(df){
     return(df)
 }
 
+# This function takes in a data frame and adds a new column 'new_file' to the data frame, with default value FALSE.
+# It then looks for all columns whose names match the pattern "folder_" and saves their indexes in a variable 'folder_idx'.
+# The function then iterates through each row of the data frame and checks if the values in the columns whose indexes are 
+# in 'folder_idx' are at least 2 "missing".
+# If the values in those columns are at least 2 "missing", then the value of the 'new_file' column for that row is set to TRUE.
+# The function returns the modified data frame with the 'new_file' column.
 check_new_file <- function(df){
     df$new_file <- FALSE
     folder_idx <- colnames(df) %>% grep(pattern ="folder_")
@@ -96,6 +109,12 @@ check_new_file <- function(df){
     return(df)
 }
 
+# This function takes in a data frame and adds a new column 'broken_file' to the data frame, with default value FALSE.
+# It then looks for all columns whose names match the pattern "folder_" and saves their indexes in a variable 'folder_idx'.
+# The function then iterates through each row of the data frame and checks if the values in the columns whose indexes are 
+# in 'folder_idx' are not "missing" (none can be "missing") and if the value of the 'n_max_hash' column for that row is 1.
+# If both conditions are met, then the value of the 'broken_file' column for that row is set to TRUE.
+# The function returns the modified data frame with the 'broken_file' column.
 check_broken_file <- function(df){
     df$broken_file <- FALSE
     folder_idx <- colnames(df) %>% grep(pattern ="folder_")
