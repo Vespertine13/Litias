@@ -132,7 +132,10 @@ get_overview <- function(df){
                            a = match_a, 
                            b = match_b, 
                            c = match_c)
-
+    
+    overview$a[df$broken_file] <- FALSE
+    overview$b[df$broken_file] <- FALSE
+    overview$c[df$broken_file] <- FALSE
     return(overview)
 }
 
