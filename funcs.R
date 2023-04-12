@@ -14,8 +14,6 @@ try_compute_hash <- function(path) {
     }
 }
 
-
-
 # This R function "create_df" takes three arguments: "folder_a_path", 
 # "folder_b_path", and "folder_c_path", which are the paths to three 
 # different folders. The function uses the "list.files" function to 
