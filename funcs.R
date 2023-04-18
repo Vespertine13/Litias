@@ -1,11 +1,10 @@
-
 # Compute the MD5 hash of a file
-compute_hash <- function(file_path) {
+compute_hash <- function(file_path){
   return(digest(file = file_path, algo = "sha256"))
 }
 
 # To compute the hash for a file at a given path and handle any errors that may occur,  you can call the "try_compute_hash" function and pass the file path as an argument, The "hash_result" variable will either contain the hash computed for the file, or the string "missing" if an error occurred during the computation.
-try_compute_hash <- function(path) {
+try_compute_hash <- function(path){
     result <- try(compute_hash(path))
     if (inherits(result, "try-error")) {
         return("missing")
