@@ -58,13 +58,15 @@ check_broken_file <- function(x){
 
 
 
-fill_hash <- function(df){
-    pb <- txtProgressBar(min = 0, max = nrow(df), style = 3)
-    for(n in 1:nrow(df)){
-            df$folder_a[n] <- try_compute_hash(paste0(folder_a_path, df$files[n]))
-            df$folder_b[n] <- try_compute_hash(paste0(folder_b_path, df$files[n]))
-            df$folder_c[n] <- try_compute_hash(paste0(folder_c_path, df$files[n]))
-            setTxtProgressBar(pb, n)
+fill_hash <- function(df,folders){
+    pb <- txtProgressBar(min = 0, max = nrow(df)*length(folders), style = 3)
+    counter <- 0
+    for(i in 1:length(folders)){
+        for(n in 1:nrow(df)){
+            df[[folders[i]]][n] <- try_compute_hash(paste0(get(folders[i]), df$files[n]))
+            counter <- counter + 1
+            setTxtProgressBar(pb, counter)
+        }
     }
     close(pb)
     return(df)

@@ -16,16 +16,40 @@ print("------------------------------------------------------------")
 # paths to different folders
 source("config.R")
 print("Current folders")
-print(folder_a_path)
-print(folder_b_path)
-print(folder_c_path)
+folders <- ls()[grep(pattern = "folder_",ls())]
+
+for(path in ls()[grep(pattern = "folder_",ls())]){
+ print(get(path))
+}
 
 print("------------------------------------------------------------")
 
-folders <- c("folder_a", "folder_b", "folder_c")
-folders_df <- create_df(folder_a_path, folder_b_path, folder_c_path)
+print("Creating df...")
+
+for(i in 1:length(folders)){
+    assign(paste0(substr(folders[i], start = 8, stop = 8),"_files"),
+           list.files(get(folders[i]), recursive = TRUE))
+}
+
+files_lst_names <- ls()[grep(pattern = "_files",ls())]
+
+totfiles <- c()
+for(name in files_lst_names){
+    totfiles <- c(totfiles, get(name))
+}
+uniqfiles <- unique(totfiles)
+df <- data.frame(files = uniqfiles)
+for(i in folders){
+    df[[i]] <- NA
+}
+
+folders_df <- df
+
+print("done")
+
+
 print("Calculating hash values...")
-overview <- fill_hash(folders_df)
+overview <- fill_hash(folders_df, folders)
 print("Done")
 
 
@@ -36,7 +60,7 @@ overview$new_file <- NA
 overview$broken_file <- NA
 
 for(i in 1:nrow(overview)){
-    hash_set <- overview[i, c("folder_a", "folder_b", "folder_c")] %>% as.character()
+    hash_set <- overview[i, folders] %>% as.character()
     overview$max[i] <- max_hash(hash_set)
     overview$n_max[i] <- n_max_hash(hash_set)
     overview$new_file[i] <- check_new_file(hash_set)
@@ -44,6 +68,8 @@ for(i in 1:nrow(overview)){
 }
 
 print("Done")
+
+# I am here!
 
 plot_df <- get_overview(overview)
 print("Generating Shell Commands...")
