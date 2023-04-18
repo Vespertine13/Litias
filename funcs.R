@@ -33,7 +33,6 @@ create_df <- function(folder_a_path, folder_b_path, folder_c_path){
 
 # takes row of hash and returns the most common
 max_hash <- function(x){
-    x <- as.character(x)
     x[x == "missing"] <- NA
     table_x <- table(x)
     return(names(table_x)[which.max(table_x)])
@@ -41,7 +40,6 @@ max_hash <- function(x){
 
 # takes row of hash and returns the count of the most common hash
 n_max_hash <- function(x){
-    x <- as.character(x)
     x[x == "missing"] <- NA
     table_x <- table(x)
     return(max(as.numeric(table_x)))
@@ -49,13 +47,11 @@ n_max_hash <- function(x){
 
 # takes row of hash and returns TRUE if the file is new
 check_new_file <- function(x){
-    x <- as.character(x)
     if(sum(x == "missing") == 2){return(TRUE)
     }else(return(FALSE))
 }
 
 check_broken_file <- function(x){
-    x <- as.character(x)
     if(sum(x == "missing") == 0 & n_max_hash(x) == 1){return(TRUE)
     }else(return(FALSE))
 }
@@ -79,17 +75,17 @@ create_shell_cmd <- function(df){
     df$shell_cmd_b <- NA
     df$shell_cmd_c <- NA
     for(n in 1:nrow(df)){
-        folder_source <- folders[first(which(c(df$folder_a[n], df$folder_b[n], df$folder_c[n]) ==df$max_hash[n]))]
+        folder_source <- folders[first(which(c(df$folder_a[n], df$folder_b[n], df$folder_c[n]) ==df$max[n]))]
         source <- paste0(get(paste0(folder_source, "_path")), df$files[n])
-        if(df$folder_a[n] != df$max_hash[n]){
+        if(df$folder_a[n] != df$max[n]){
             target <- paste0(folder_a_path, df$files[n])
             df$shell_cmd_a[n] <- glue('xcopy "{source}" "{target}"')
         }
-        if(df$folder_b[n] != df$max_hash[n]){
+        if(df$folder_b[n] != df$max[n]){
             target <- paste0(folder_b_path, df$files[n])
             df$shell_cmd_b[n] <- glue('xcopy "{source}" "{target}"')
         }
-        if(df$folder_c[n] != df$max_hash[n]){
+        if(df$folder_c[n] != df$max[n]){
             target <- paste0(folder_c_path, df$files[n])
             df$shell_cmd_c[n] <- glue('xcopy "{source}" "{target}"')
         }
@@ -103,40 +99,12 @@ create_shell_cmd <- function(df){
     return(df)
 }
 
-# This function takes in a data frame and adds a new column 'new_file' to the data frame, with default value FALSE.
-# It then looks for all columns whose names match the pattern "folder_" and saves their indexes in a variable 'folder_idx'.
-# The function then iterates through each row of the data frame and checks if the values in the columns whose indexes are 
-# in 'folder_idx' are at least 2 "missing".
-# If the values in those columns are at least 2 "missing", then the value of the 'new_file' column for that row is set to TRUE.
-# The function returns the modified data frame with the 'new_file' column.
-check_new_file <- function(df){
-    df$new_file <- FALSE
-    folder_idx <- colnames(df) %>% grep(pattern ="folder_")
-    for(i in 1:nrow(df)){
-        if(sum(df[i, folder_idx] == "missing") == 2){df$new_file[i] <- TRUE}
-    }
-    return(df)
-}
 
-# This function takes in a data frame and adds a new column 'broken_file' to the data frame, with default value FALSE.
-# It then looks for all columns whose names match the pattern "folder_" and saves their indexes in a variable 'folder_idx'.
-# The function then iterates through each row of the data frame and checks if the values in the columns whose indexes are 
-# in 'folder_idx' are not "missing" (none can be "missing") and if the value of the 'n_max_hash' column for that row is 1.
-# If both conditions are met, then the value of the 'broken_file' column for that row is set to TRUE.
-# The function returns the modified data frame with the 'broken_file' column.
-check_broken_file <- function(df){
-    df$broken_file <- FALSE
-    folder_idx <- colnames(df) %>% grep(pattern ="folder_")
-    for(i in 1:nrow(df)){
-        if(sum(df[i, folder_idx] == "missing") == 0 & df$n_max_hash[i] == 1){df$broken_file[i] <- TRUE}
-    }
-    return(df)
-}
 
 get_overview <- function(df){
-    match_a <- df$folder_a == df$max_hash
-    match_b <- df$folder_b == df$max_hash
-    match_c <- df$folder_c == df$max_hash
+    match_a <- df$folder_a == df$max
+    match_b <- df$folder_b == df$max
+    match_c <- df$folder_c == df$max
     overview <- data.frame(files = df$files,
                            a = match_a, 
                            b = match_b, 

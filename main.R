@@ -28,29 +28,26 @@ print("Calculating hash values...")
 overview <- fill_hash(folders_df)
 print("Done")
 
+
+print("Calculating statistics...")
 overview$max <- NA
 overview$n_max <- NA
 overview$new_file <- NA
 overview$broken_file <- NA
 
 for(i in 1:nrow(overview)){
-    overview$max[i] <- max_hash(overview[i,c("folder_a", "folder_b", "folder_c")])
-    overview$n_max[i] <- n_max_hash(overview[i,c("folder_a", "folder_b", "folder_c")])
-    overview$new_file[i] <- check_new_file(overview[i,c("folder_a", "folder_b", "folder_c")])
-    overview$broken_file[i] <- check_broken_file(overview[i,c("folder_a", "folder_b", "folder_c")])
+    hash_set <- overview[i, c("folder_a", "folder_b", "folder_c")] %>% as.character()
+    overview$max[i] <- max_hash(hash_set)
+    overview$n_max[i] <- n_max_hash(hash_set)
+    overview$new_file[i] <- check_new_file(hash_set)
+    overview$broken_file[i] <- check_broken_file(hash_set)
 }
-overview
 
-print("Calculating statistics...")
-freq_df <- calculate_hash_freq(overview)
-df_with_new_files <- check_new_file(freq_df)
-df_with_broken_files <- check_broken_file(df_with_new_files)
 print("Done")
 
-
-plot_df <- get_overview(df_with_broken_files)
+plot_df <- get_overview(overview)
 print("Generating Shell Commands...")
-shell_df <- create_shell_cmd(df_with_broken_files)
+shell_df <- create_shell_cmd(overview)
 print("Done")
 
 n_broken <- sum(shell_df$broken_file)
