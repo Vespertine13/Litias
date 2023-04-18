@@ -30,25 +30,37 @@ create_df <- function(folder_a_path, folder_b_path, folder_c_path){
     return(df)
 }
 
-# Calculates the frequency of hash values for each folder in the input 
-# data frame and adds the maximum hash value and its frequency to each 
-# row of the data frame.
-calculate_hash_freq <- function(df){
-    folder_idx <- colnames(df) %>% grep(pattern ="folder_")
-    hash_df <- df[,folder_idx]
-    hash_df[hash_df == "missing"] <- NA
-    max_hash <- rep(NA, nrow(hash_df))
-    n_max_hash <- rep(NA, nrow(hash_df))
-    all_diff <- rep(NA, nrow(hash_df))
-    for(i in 1:nrow(hash_df)){
-        table_i <- hash_df[i,] %>% as.character() %>% table()
-        max_hash[i] <- names(table_i)[which.max(table_i)]
-        n_max_hash[i] <- table_i %>% as.numeric() %>% max()
-    }
-    df$max_hash <- max_hash
-    df$n_max_hash <- n_max_hash
-    return(df)
+
+# takes row of hash and returns the most common
+max_hash <- function(x){
+    x <- as.character(x)
+    x[x == "missing"] <- NA
+    table_x <- table(x)
+    return(names(table_x)[which.max(table_x)])
 }
+
+# takes row of hash and returns the count of the most common hash
+n_max_hash <- function(x){
+    x <- as.character(x)
+    x[x == "missing"] <- NA
+    table_x <- table(x)
+    return(max(as.numeric(table_x)))
+}
+
+# takes row of hash and returns TRUE if the file is new
+check_new_file <- function(x){
+    x <- as.character(x)
+    if(sum(x == "missing") == 2){return(TRUE)
+    }else(return(FALSE))
+}
+
+check_broken_file <- function(x){
+    x <- as.character(x)
+    if(sum(x == "missing") == 0 & n_max_hash(x) == 1){return(TRUE)
+    }else(return(FALSE))
+}
+
+
 
 fill_hash <- function(df){
     pb <- txtProgressBar(min = 0, max = nrow(df), style = 3)
