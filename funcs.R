@@ -30,6 +30,12 @@ create_df <- function(folder_a_path, folder_b_path, folder_c_path){
     return(df)
 }
 
+provide_folders <- function(){
+    if(!("folders" %in% ls(envir=.GlobalEnv))){
+        print("creating variable folders")
+        folders <<- ls(envir=.GlobalEnv)[grep(pattern = "folder_",ls(envir=.GlobalEnv))]
+    }
+}
 
 # takes row of hash and returns the most common
 max_hash <- function(x){
@@ -55,7 +61,6 @@ check_broken_file <- function(x){
     if(sum(x == "missing") == 0 & n_max_hash(x) == 1){return(TRUE)
     }else(return(FALSE))
 }
-
 
 
 fill_hash <- function(df,folders){

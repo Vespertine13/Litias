@@ -1,5 +1,7 @@
 # this R code can be used to check if files R alike
 print("-------------------------- Litias --------------------------")
+# rm(list= ls())
+
 print("Loading libraries...")
 suppressPackageStartupMessages(library(tidyverse))
 library(digest)
@@ -16,11 +18,8 @@ print("------------------------------------------------------------")
 # paths to different folders
 source("config.R")
 print("Current folders")
-folders <- ls()[grep(pattern = "folder_",ls())]
 
-for(path in ls()[grep(pattern = "folder_",ls())]){
- print(get(path))
-}
+provide_folders()
 
 print("------------------------------------------------------------")
 
@@ -31,8 +30,15 @@ for(i in 1:length(folders)){
            list.files(get(folders[i]), recursive = TRUE))
 }
 
-files_lst_names <- ls()[grep(pattern = "_files",ls())]
 
+provide_lstfolders <- function(){
+    if(!("folders" %in% ls(envir=.GlobalEnv))){
+        print("creating variable folders")
+        folders <<- ls(envir=.GlobalEnv)[grep(pattern = "folder_",ls(envir=.GlobalEnv))]
+    }
+}
+
+files_lst_names <- paste0(substr(folders, start = 8, stop = 8), "_files")
 totfiles <- c()
 for(name in files_lst_names){
     totfiles <- c(totfiles, get(name))
