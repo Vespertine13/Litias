@@ -107,7 +107,13 @@ create_shell_cmd <- function(df){
     return(df)
 }
 
+get_match <- function(x, y){
+    return(x == y)
+}
 
+get_folder_letter <- function(x){
+    return(substr(x, start = 8, stop = 8))
+}
 
 get_overview <- function(df){
     match_a <- df$folder_a == df$max

@@ -26,11 +26,11 @@ print("------------------------------------------------------------")
 print("Creating df...")
 
 for(i in 1:length(folders)){
-    assign(paste0(substr(folders[i], start = 8, stop = 8),"_files"),
+    assign(paste0(get_folder_letter(folders[i]),"_files"),
            list.files(get(folders[i]), recursive = TRUE))
 }
 
-files_lst_names <- paste0(substr(folders, start = 8, stop = 8), "_files")
+files_lst_names <- paste0(get_folder_letter(folders), "_files")
 totfiles <- c()
 for(name in files_lst_names){
     totfiles <- c(totfiles, get(name))
@@ -69,6 +69,31 @@ print("Done")
 
 overview
 # I am here!
+
+for(i in 1:length(folders)){
+    assign(
+        paste0("match_", get_folder_letter(folders[i]))
+
+    )
+}
+
+
+get_overview <- function(df){
+    match_a <- df$folder_a == df$max
+    match_b <- df$folder_b == df$max
+    match_c <- df$folder_c == df$max
+    overview <- data.frame(files = df$files,
+                           a = match_a, 
+                           b = match_b, 
+                           c = match_c)
+    
+    overview$a[df$broken_file] <- FALSE
+    overview$b[df$broken_file] <- FALSE
+    overview$c[df$broken_file] <- FALSE
+    return(overview)
+}
+
+
 
 plot_df <- get_overview(overview)
 print("Generating Shell Commands...")
