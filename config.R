@@ -2,7 +2,7 @@
 folder_a <- "e:/folder_a/"
 folder_b <- "e:/folder_b/"
 folder_c <- "e:/folder_c/"
-folder_d <- "e:/folder_c/"
+folder_d <- "e:/folder_d/"
 
 # folder_a <- "c:/Users/ekb/folder_a/"
 # folder_b <- "c:/Users/ekb/folder_b/"

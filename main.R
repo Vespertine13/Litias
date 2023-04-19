@@ -41,8 +41,6 @@ for(i in folders){
     df[[i]] <- NA
 }
 
-
-
 print("done")
 
 
@@ -82,24 +80,20 @@ for(i in 1:length(folders)){
 }
 
 
-# I am here!
-idx <- grep(pattern = "folder_", colnames(df))
-n <- 1
-folder_source <- sample(folders[which(df[n, idx] == df$max[n])], 1)
-source <- paste0(get(paste0(folder_source)), df$files[n])
-
-
 idx <- grep(pattern = "folder_", colnames(df))
 for(i in 1:nrow(df)){
-    folder_source <- sample(folders[which(df[n, idx] == df$max[n])], 1)
-    source <- paste0(get(paste0(folder_source)), df$files[n])
+    folder_source <- sample(folders[which(df[i, idx] == df$max[i])], 1)
+    source <- paste0(get(paste0(folder_source)), df$files[i])
     for(n in 1:length(folders)){
         if(df[[folders[n]]][i] != df$max[i]){
-            target <- paste0(get(folders[n]), df$files[n])
+            target <- paste0(get(folders[n]), df$files[i])
             df[[paste0("shell_cmd_",extract_letter(folders[n]))]][i] <- glue('xcopy "{source}" "{target}"')
         }
     }
 }
+
+all_shells <- paste0("shell_cmd_",extract_letter(folders))
+df[df$broken_file,all_shells] <- NA
 
 print("Done")
 
@@ -112,14 +106,17 @@ print(glue("Number of new files: {n_new}"))
 
 if(sum(df$new_file) >0){print(df$files[df$new_file])}
 
-total_cmd <- sum(!is.na(df$shell_cmd_a)) + 
-    sum(!is.na(df$shell_cmd_b)) + 
-    sum(!is.na(df$shell_cmd_c))
 
+total_cmd <- sum(!is.na(df[ ,all_shells]))
 print(glue("Number of suggested commands: {total_cmd}"))
-if(sum(!is.na(df$shell_cmd_a)) >0){print(df$shell_cmd_a[!is.na(df$shell_cmd_a)])}
-if(sum(!is.na(df$shell_cmd_b)) >0){print(df$shell_cmd_b[!is.na(df$shell_cmd_b)])}
-if(sum(!is.na(df$shell_cmd_c)) >0){print(df$shell_cmd_c[!is.na(df$shell_cmd_c)])}
+
+for(i in 1:length(all_shells)){
+    if(sum(!is.na(df[[all_shells[i]]])) >0){
+        print(df[[all_shells[i]]][!is.na(df[[all_shells[i]]])])
+    }
+}
+
 
 print("------------------------------------------------------------")
 
+plot_overview(plot_df)
