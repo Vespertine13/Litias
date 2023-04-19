@@ -30,14 +30,6 @@ for(i in 1:length(folders)){
            list.files(get(folders[i]), recursive = TRUE))
 }
 
-
-provide_lstfolders <- function(){
-    if(!("folders" %in% ls(envir=.GlobalEnv))){
-        print("creating variable folders")
-        folders <<- ls(envir=.GlobalEnv)[grep(pattern = "folder_",ls(envir=.GlobalEnv))]
-    }
-}
-
 files_lst_names <- paste0(substr(folders, start = 8, stop = 8), "_files")
 totfiles <- c()
 for(name in files_lst_names){
@@ -75,6 +67,7 @@ for(i in 1:nrow(overview)){
 
 print("Done")
 
+overview
 # I am here!
 
 plot_df <- get_overview(overview)

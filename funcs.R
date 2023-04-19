@@ -37,6 +37,7 @@ provide_folders <- function(){
     }
 }
 
+
 # takes row of hash and returns the most common
 max_hash <- function(x){
     x[x == "missing"] <- NA
@@ -53,7 +54,7 @@ n_max_hash <- function(x){
 
 # takes row of hash and returns TRUE if the file is new
 check_new_file <- function(x){
-    if(sum(x == "missing") == 2){return(TRUE)
+    if(sum(x == "missing") == (length(folders)-1)){return(TRUE)
     }else(return(FALSE))
 }
 
