@@ -111,23 +111,8 @@ get_match <- function(x, y){
     return(x == y)
 }
 
-get_folder_letter <- function(x){
+extract_letter <- function(x){
     return(substr(x, start = 8, stop = 8))
-}
-
-get_overview <- function(df){
-    match_a <- df$folder_a == df$max
-    match_b <- df$folder_b == df$max
-    match_c <- df$folder_c == df$max
-    overview <- data.frame(files = df$files,
-                           a = match_a, 
-                           b = match_b, 
-                           c = match_c)
-    
-    overview$a[df$broken_file] <- FALSE
-    overview$b[df$broken_file] <- FALSE
-    overview$c[df$broken_file] <- FALSE
-    return(overview)
 }
 
 plot_overview <- function(df){
