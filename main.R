@@ -1,5 +1,7 @@
 # this R code can be used to check if files R alike
 print("-------------------------- Litias --------------------------")
+# rm(list= ls())
+
 print("Loading libraries...")
 suppressPackageStartupMessages(library(tidyverse))
 library(digest)
@@ -16,47 +18,103 @@ print("------------------------------------------------------------")
 # paths to different folders
 source("config.R")
 print("Current folders")
-print(folder_a_path)
-print(folder_b_path)
-print(folder_c_path)
+
+provide_folders()
 
 print("------------------------------------------------------------")
 
-folders <- c("folder_a", "folder_b", "folder_c")
-folders_df <- create_df(folder_a_path, folder_b_path, folder_c_path)
+print("Creating df...")
+
+for(i in 1:length(folders)){
+    assign(paste0(extract_letter(folders[i]),"_files"),
+           list.files(get(folders[i]), recursive = TRUE))
+}
+
+files_lst_names <- paste0(extract_letter(folders), "_files")
+totfiles <- c()
+for(name in files_lst_names){
+    totfiles <- c(totfiles, get(name))
+}
+uniqfiles <- unique(totfiles)
+df <- data.frame(files = uniqfiles)
+for(i in folders){
+    df[[i]] <- NA
+}
+
+print("done")
+
+
 print("Calculating hash values...")
-overview <- fill_hash(folders_df)
+df <- fill_hash(df, folders)
+
 print("Done")
 
 print("Calculating statistics...")
-freq_df <- calculate_hash_freq(overview)
-df_with_new_files <- check_new_file(freq_df)
-df_with_broken_files <- check_broken_file(df_with_new_files)
+df$max <- NA
+df$n_max <- NA
+df$new_file <- NA
+df$broken_file <- NA
+
+for(i in 1:nrow(df)){
+    hash_set <- df[i, folders] %>% as.character()
+    df$max[i] <- max_hash(hash_set)
+    df$n_max[i] <- n_max_hash(hash_set)
+    df$new_file[i] <- check_new_file(hash_set)
+    df$broken_file[i] <- check_broken_file(hash_set)
+}
+
+for(i in 1:length(folders)){
+    df[[extract_letter(folders[i])]] <- get_match(df[[folders[i]]], df$max)
+    df[[extract_letter(folders[i])]][df$broken_file] <- FALSE
+}
+
+plot_df <- df[,nchar(colnames(df)) == 1]
+plot_df$files <- df$files
 print("Done")
 
 
-plot_df <- get_overview(df_with_broken_files)
 print("Generating Shell Commands...")
-shell_df <- create_shell_cmd(df_with_broken_files)
+
+for(i in 1:length(folders)){
+    df[[paste0("shell_cmd_",extract_letter(folders[i]))]] <- NA
+}
+
+
+idx <- grep(pattern = "folder_", colnames(df))
+for(i in 1:nrow(df)){
+    folder_source <- sample(folders[which(df[i, idx] == df$max[i])], 1)
+    source <- paste0(get(paste0(folder_source)), df$files[i])
+    for(n in 1:length(folders)){
+        if(df[[folders[n]]][i] != df$max[i]){
+            target <- paste0(get(folders[n]), df$files[i])
+            df[[paste0("shell_cmd_",extract_letter(folders[n]))]][i] <- glue('xcopy "{source}" "{target}"')
+        }
+    }
+}
+
+all_shells <- paste0("shell_cmd_",extract_letter(folders))
+df[df$broken_file,all_shells] <- NA
+
 print("Done")
 
-n_broken <- sum(shell_df$broken_file)
+n_broken <- sum(df$broken_file)
 print(glue("Number of broken files: {n_broken}"))
-if(sum(shell_df$broken_file) >0){print(shell_df$files[shell_df$broken_file])}
+if(sum(df$broken_file) >0){print(df$files[df$broken_file])}
 
-n_new <- sum(shell_df$new_file)
+n_new <- sum(df$new_file)
 print(glue("Number of new files: {n_new}"))
 
-if(sum(shell_df$new_file) >0){print(shell_df$files[shell_df$new_file])}
+if(sum(df$new_file) >0){print(df$files[df$new_file])}
 
-total_cmd <- sum(!is.na(shell_df$shell_cmd_a)) + 
-    sum(!is.na(shell_df$shell_cmd_b)) + 
-    sum(!is.na(shell_df$shell_cmd_c))
 
+total_cmd <- sum(!is.na(df[ ,all_shells]))
 print(glue("Number of suggested commands: {total_cmd}"))
-if(sum(!is.na(shell_df$shell_cmd_a)) >0){print(shell_df$shell_cmd_a[!is.na(shell_df$shell_cmd_a)])}
-if(sum(!is.na(shell_df$shell_cmd_b)) >0){print(shell_df$shell_cmd_b[!is.na(shell_df$shell_cmd_b)])}
-if(sum(!is.na(shell_df$shell_cmd_c)) >0){print(shell_df$shell_cmd_c[!is.na(shell_df$shell_cmd_c)])}
+
+for(i in 1:length(all_shells)){
+    if(sum(!is.na(df[[all_shells[i]]])) >0){
+        print(df[[all_shells[i]]][!is.na(df[[all_shells[i]]])])
+    }
+}
+
 
 print("------------------------------------------------------------")
-
