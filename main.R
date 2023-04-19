@@ -118,5 +118,3 @@ for(i in 1:length(all_shells)){
 
 
 print("------------------------------------------------------------")
-
-plot_overview(plot_df)

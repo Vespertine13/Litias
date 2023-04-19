@@ -78,34 +78,6 @@ fill_hash <- function(df,folders){
     return(df)
 }
 
-create_shell_cmd <- function(df){
-    df$shell_cmd_a <- NA
-    df$shell_cmd_b <- NA
-    df$shell_cmd_c <- NA
-    for(n in 1:nrow(df)){
-        folder_source <- folders[first(which(c(df$folder_a[n], df$folder_b[n], df$folder_c[n]) ==df$max[n]))]
-        source <- paste0(get(paste0(folder_source, "_path")), df$files[n])
-        if(df$folder_a[n] != df$max[n]){
-            target <- paste0(folder_a_path, df$files[n])
-            df$shell_cmd_a[n] <- glue('xcopy "{source}" "{target}"')
-        }
-        if(df$folder_b[n] != df$max[n]){
-            target <- paste0(folder_b_path, df$files[n])
-            df$shell_cmd_b[n] <- glue('xcopy "{source}" "{target}"')
-        }
-        if(df$folder_c[n] != df$max[n]){
-            target <- paste0(folder_c_path, df$files[n])
-            df$shell_cmd_c[n] <- glue('xcopy "{source}" "{target}"')
-        }
-    }
-    df$shell_cmd_a <- gsub("/", "\\\\", df$shell_cmd_a)
-    df$shell_cmd_b <- gsub("/", "\\\\", df$shell_cmd_b)
-    df$shell_cmd_c <- gsub("/", "\\\\", df$shell_cmd_c)
-    df$shell_cmd_a[df$broken_file] <- NA
-    df$shell_cmd_b[df$broken_file] <- NA
-    df$shell_cmd_c[df$broken_file] <- NA
-    return(df)
-}
 
 get_match <- function(x, y){
     return(x == y)
@@ -136,11 +108,11 @@ plot_overview <- function(df){
     return(fig)
 }
 
-
 run_shells  <- function(df){
     for(i in 1:nrow(df)){
-        if(!is.na(df$shell_cmd_a[i])){shell(paste0(df$shell_cmd_a[i], " /Y /F"))}
-        if(!is.na(df$shell_cmd_b[i])){shell(paste0(df$shell_cmd_b[i], " /Y /F"))}
-        if(!is.na(df$shell_cmd_c[i])){shell(paste0(df$shell_cmd_c[i], " /Y /F"))}
+        for(n in 1:length(all_shells)){
+            if(!is.na(df[[all_shells[n]]][i])){shell(paste0(df[[all_shells[n]]][i], " /Y /F"))}
+        }
     }
 }
+
