@@ -42,14 +42,18 @@ provide_folders <- function(){
 max_hash <- function(x){
     x[x == "missing"] <- NA
     table_x <- table(x)
-    return(names(table_x)[which.max(table_x)])
+    y <- names(table_x)[which.max(table_x)]
+    if(is.null(y)){return(NA)
+    }else{return(y)}
 }
 
 # takes row of hash and returns the count of the most common hash
 n_max_hash <- function(x){
     x[x == "missing"] <- NA
     table_x <- table(x)
-    return(max(as.numeric(table_x)))
+    y <- max(as.numeric(table_x))
+    if(is.null(y)){return(NA)
+    }else{return(y)}
 }
 
 # takes row of hash and returns TRUE if the file is new
