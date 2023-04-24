@@ -89,7 +89,9 @@ for(i in 1:nrow(df)){
         if(df[[folders[n]]][i] != df$max[i]){
             target <- paste0(get(folders[n]), df$files[i])
             target_windows <- str_replace_all(target, pattern = "/", replacement = "\\\\")
-            df[[paste0("shell_cmd_",extract_letter(folders[n]))]][i] <- glue('copy /y "{source_windows}" "{target_windows}"')
+            dirname <- dirname(target)
+            dirname_windows <- str_replace_all(dirname, pattern = "/", replacement = "\\\\")
+            df[[paste0("shell_cmd_",extract_letter(folders[n]))]][i] <- glue('mkdir "{dirname_windows}" && copy /y "{source_windows}" "{target_windows}"')
         }
     }
 }

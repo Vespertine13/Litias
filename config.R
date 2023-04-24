@@ -29,8 +29,8 @@ if(file_filter == "music"){
 }
 
 # testfolder
-if(file_filter == "test"){
-    folder_a <- "f:/folder_a/test/"
-    folder_b <- "f:/folder_b/test/"
-    folder_c <- "e:/folder_c/test/"
+if(file_filter == "test_folder"){
+    folder_a <- "f:/folder_a/test_folder/"
+    folder_b <- "f:/folder_b/test_folder/"
+    folder_c <- "e:/folder_c/test_folder/"
 }
