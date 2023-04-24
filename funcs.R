@@ -115,7 +115,7 @@ plot_overview <- function(df){
 run_shells  <- function(df){
     for(i in 1:nrow(df)){
         for(n in 1:length(all_shells)){
-            if(!is.na(df[[all_shells[n]]][i])){shell(paste0(df[[all_shells[n]]][i], " /Y /F"))}
+            if(!is.na(df[[all_shells[n]]][i])){shell(df[[all_shells[n]]][i])}
         }
     }
 }
