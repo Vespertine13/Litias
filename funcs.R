@@ -114,8 +114,16 @@ plot_overview <- function(df){
 
 run_shells  <- function(df){
     for(i in 1:nrow(df)){
-        for(n in 1:length(all_shells)){
-            if(!is.na(df[[all_shells[n]]][i])){shell(paste0(df[[all_shells[n]]][i], " /Y /F"))}
+        for(n in 1:length(folders)){
+            j <- extract_letter(folders[n])
+            if(!is.na(df[[all_shells[n]]][i])){
+                current_dir <- df[[paste0("target_folder_", j)]][i]
+                if(!dir.exists(current_dir)){
+                    dirname_windows <- str_replace_all(current_dir, pattern = "/", replacement = "\\\\")
+                    shell(glue('mkdir "{dirname_windows}"'))
+                }
+                shell(df[[all_shells[n]]][i])
+            }
         }
     }
 }

@@ -21,7 +21,7 @@ print("Current folders")
 
 provide_folders()
 
-print("------------------------------------------------------------")
+:print("------------------------------------------------------------")
 
 print("Creating df...")
 
@@ -77,6 +77,7 @@ print("Generating Shell Commands...")
 
 for(i in 1:length(folders)){
     df[[paste0("shell_cmd_",extract_letter(folders[i]))]] <- NA
+    df[[paste0("target_folder_",extract_letter(folders[i]))]] <- NA
 }
 
 
@@ -84,10 +85,13 @@ idx <- grep(pattern = "folder_", colnames(df))
 for(i in 1:nrow(df)){
     folder_source <- sample(folders[which(df[i, idx] == df$max[i])], 1)
     source <- paste0(get(paste0(folder_source)), df$files[i])
+    source_windows <- str_replace_all(source, pattern = "/", replacement = "\\\\")
     for(n in 1:length(folders)){
         if(df[[folders[n]]][i] != df$max[i]){
             target <- paste0(get(folders[n]), df$files[i])
-            df[[paste0("shell_cmd_",extract_letter(folders[n]))]][i] <- glue('xcopy "{source}" "{target}"')
+            target_windows <- str_replace_all(target, pattern = "/", replacement = "\\\\")
+            df[[paste0("shell_cmd_",extract_letter(folders[n]))]][i] <- glue('copy /y "{source_windows}" "{target_windows}"')
+            df[[paste0("target_folder_",extract_letter(folders[n]))]][i] <- dirname(target)
         }
     }
 }
@@ -115,6 +119,21 @@ for(i in 1:length(all_shells)){
         print(df[[all_shells[i]]][!is.na(df[[all_shells[i]]])])
     }
 }
+
+# i am here
+# n <- 1
+# i <- 28
+# j <- extract_letter(folders[n])
+# df %>% colnames()
+# 
+# !dir.exists(df[[paste0("target_folder_", j)]][i])
+# current_dir <- df[[paste0("target_folder_", j)]][i]
+# dir.exists(current_dir)
+# 
+# current_dir <- "c:/Users/ekb/folder_a/what"
+# dirname_windows <- str_replace_all(current_dir, pattern = "/", replacement = "\\\\")
+# 
+# shell(glue('mkdir "{dirname_windows}"'))
 
 
 print("------------------------------------------------------------")
