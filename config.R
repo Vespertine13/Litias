@@ -1,4 +1,5 @@
 # paths to folders (full path)
+# paths to folders (full path)
 
 # all
 if(file_filter == "all"){
@@ -7,18 +8,18 @@ if(file_filter == "all"){
     folder_c <- "e:/folder_c/"
 }
 
-# books
-if(file_filter == "books"){
-    folder_a <- "f:/folder_a/books/"
-    folder_b <- "f:/folder_b/books/"
-    folder_c <- "e:/folder_c/books/"
+# literature
+if(file_filter == "literature"){
+    folder_a <- "f:/folder_a/literature/"
+    folder_b <- "f:/folder_b/literature/"
+    folder_c <- "e:/folder_c/literature/"
 }
 
-# bilder
-if(file_filter == "bilder"){
-    folder_a <- "f:/folder_a/bilder/"
-    folder_b <- "f:/folder_b/bilder/"
-    folder_c <- "e:/folder_c/bilder/"
+# images
+if(file_filter == "images"){
+    folder_a <- "f:/folder_a/images/"
+    folder_b <- "f:/folder_b/images/"
+    folder_c <- "e:/folder_c/images/"
 }
 
 # music
@@ -28,12 +29,30 @@ if(file_filter == "music"){
     folder_c <- "e:/folder_c/music/"
 }
 
+# documents
+if(file_filter == "documents"){
+    folder_a <- "f:/folder_a/documents/"
+    folder_b <- "f:/folder_b/documents/"
+    folder_c <- "e:/folder_c/documents/"
+}
+
+# music
+if(file_filter == "music"){
+    folder_a <- "f:/folder_a/music/"
+    folder_b <- "f:/folder_b/music/"
+    folder_c <- "e:/folder_c/music/"
+}
+
+# games
+if(file_filter == "games"){
+    folder_a <- "f:/folder_a/games/"
+    folder_b <- "f:/folder_b/games/"
+    folder_c <- "e:/folder_c/games/"
+}
 
 # testfolder
 if(file_filter == "test_folder"){
-    folder_a <- "c:/Users/ekb/folder_a/"
-    folder_b <- "c:/Users/ekb/folder_b/"
-    folder_c <- "c:/Users/ekb/folder_c/"
-    folder_d <- "c:/Users/ekb/folder_d/"
-    folder_e <- "c:/Users/ekb/folder_e/"
+    folder_a <- "f:/folder_a/test_folder/"
+    folder_b <- "f:/folder_b/test_folder/"
+    folder_c <- "e:/folder_c/test_folder/"
 }
