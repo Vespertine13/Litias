@@ -120,20 +120,4 @@ for(i in 1:length(all_shells)){
     }
 }
 
-# i am here
-# n <- 1
-# i <- 28
-# j <- extract_letter(folders[n])
-# df %>% colnames()
-# 
-# !dir.exists(df[[paste0("target_folder_", j)]][i])
-# current_dir <- df[[paste0("target_folder_", j)]][i]
-# dir.exists(current_dir)
-# 
-# current_dir <- "c:/Users/ekb/folder_a/what"
-# dirname_windows <- str_replace_all(current_dir, pattern = "/", replacement = "\\\\")
-# 
-# shell(glue('mkdir "{dirname_windows}"'))
-
-
 print("------------------------------------------------------------")
