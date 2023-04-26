@@ -37,7 +37,6 @@ provide_folders <- function(){
     }
 }
 
-
 # takes row of hash and returns the most common
 max_hash <- function(x){
     x[x == "missing"] <- NA

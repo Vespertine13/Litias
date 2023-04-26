@@ -2,11 +2,9 @@
 # paths to folders (full path)
 
 # all
-if(file_filter == "all"){
-    folder_a <- "f:/folder_a/"
-    folder_b <- "f:/folder_b/"
-    folder_c <- "e:/folder_c/"
-}
+folder_a <- "f:/folder_a/"
+folder_b <- "f:/folder_b/"
+folder_c <- "e:/folder_c/"
 
 # literature
 if(file_filter == "literature"){
@@ -37,10 +35,10 @@ if(file_filter == "documents"){
 }
 
 # music
-if(file_filter == "music"){
-    folder_a <- "f:/folder_a/music/"
-    folder_b <- "f:/folder_b/music/"
-    folder_c <- "e:/folder_c/music/"
+if(file_filter == "video"){
+    folder_a <- "f:/folder_a/video/"
+    folder_b <- "f:/folder_b/video/"
+    folder_c <- "e:/folder_c/video/"
 }
 
 # games
@@ -51,7 +49,7 @@ if(file_filter == "games"){
 }
 
 # testfolder
-if(file_filter == "test_folder"){
+if(file_filter == "test"){
     folder_a <- "f:/folder_a/test_folder/"
     folder_b <- "f:/folder_b/test_folder/"
     folder_c <- "e:/folder_c/test_folder/"

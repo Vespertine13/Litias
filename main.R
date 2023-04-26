@@ -1,6 +1,5 @@
 # this R code can be used to check if files R alike
 print("-------------------------- Litias --------------------------")
-# rm(list= ls())
 
 print("Loading libraries...")
 suppressPackageStartupMessages(library(tidyverse))
