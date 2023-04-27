@@ -111,6 +111,10 @@ plot_overview <- function(df){
     return(fig)
 }
 
+to_windows <- function(x){
+    return(str_replace_all(x, pattern = "/", replacement = "\\\\"))
+}
+
 run_shells  <- function(df){
     for(i in 1:nrow(df)){
         for(n in 1:length(folders)){
@@ -118,7 +122,7 @@ run_shells  <- function(df){
             if(!is.na(df[[all_shells[n]]][i])){
                 current_dir <- df[[paste0("target_folder_", j)]][i]
                 if(!dir.exists(current_dir)){
-                    dirname_windows <- str_replace_all(current_dir, pattern = "/", replacement = "\\\\")
+                    dirname_windows <- to_windows(current_dir)
                     shell(glue('mkdir "{dirname_windows}"'))
                 }
                 shell(df[[all_shells[n]]][i])
