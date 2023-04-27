@@ -30,6 +30,7 @@ create_df <- function(folder_a_path, folder_b_path, folder_c_path){
     return(df)
 }
 
+# creates a folder variable with the folders given in config
 provide_folders <- function(){
     if(!("folders" %in% ls(envir=.GlobalEnv))){
         print("creating variable folders")
@@ -61,12 +62,15 @@ check_new_file <- function(x){
     }else(return(FALSE))
 }
 
+# checks if a file is broken
+# that is: all files are present, but different
+# meaning that it is unknown which is like the original
 check_broken_file <- function(x){
     if(sum(x == "missing") == 0 & n_max_hash(x) == 1){return(TRUE)
     }else(return(FALSE))
 }
 
-
+# uses the function try_compute_hash to get the hash value of all files listed in df
 fill_hash <- function(df,folders){
     pb <- txtProgressBar(min = 0, max = nrow(df)*length(folders), style = 3)
     counter <- 0
@@ -82,14 +86,17 @@ fill_hash <- function(df,folders){
 }
 
 
+# checks if x and y are the same
 get_match <- function(x, y){
     return(x == y)
 }
 
+# extracts the letter that identifies a folder
 extract_letter <- function(x){
     return(substr(x, start = 8, stop = 8))
 }
 
+# creates a heatmap like overview over missing and changed files
 plot_overview <- function(df){
     plot_df <- melt(df, id.vars = "files")
 
@@ -111,6 +118,15 @@ plot_overview <- function(df){
     return(fig)
 }
 
+# takes character path to file or folder and converts it into a windows style path
+to_windows <- function(x){
+    return(str_replace_all(x, pattern = "/", replacement = "\\\\"))
+}
+
+# runs all shells in shell columns (in variable all_shells)
+# specifically it 
+# first check if folder is created and creates it if not
+# copies files into the folder overwriting existing file if any 
 run_shells  <- function(df){
     for(i in 1:nrow(df)){
         for(n in 1:length(folders)){
@@ -118,7 +134,7 @@ run_shells  <- function(df){
             if(!is.na(df[[all_shells[n]]][i])){
                 current_dir <- df[[paste0("target_folder_", j)]][i]
                 if(!dir.exists(current_dir)){
-                    dirname_windows <- str_replace_all(current_dir, pattern = "/", replacement = "\\\\")
+                    dirname_windows <- to_windows(current_dir)
                     shell(glue('mkdir "{dirname_windows}"'))
                 }
                 shell(df[[all_shells[n]]][i])

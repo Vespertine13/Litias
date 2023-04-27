@@ -84,12 +84,10 @@ idx <- grep(pattern = "folder_", colnames(df))
 for(i in 1:nrow(df)){
     folder_source <- sample(folders[which(df[i, idx] == df$max[i])], 1)
     source <- paste0(get(paste0(folder_source)), df$files[i])
-    source_windows <- str_replace_all(source, pattern = "/", replacement = "\\\\")
     for(n in 1:length(folders)){
         if(df[[folders[n]]][i] != df$max[i]){
             target <- paste0(get(folders[n]), df$files[i])
-            target_windows <- str_replace_all(target, pattern = "/", replacement = "\\\\")
-            df[[paste0("shell_cmd_",extract_letter(folders[n]))]][i] <- glue('copy /y "{source_windows}" "{target_windows}"')
+            df[[paste0("shell_cmd_",extract_letter(folders[n]))]][i] <- glue('copy /y "{to_windows(source)}" "{to_windows(target)}"')
             df[[paste0("target_folder_",extract_letter(folders[n]))]][i] <- dirname(target)
         }
     }
