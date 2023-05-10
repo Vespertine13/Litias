@@ -19,6 +19,9 @@ source("config.R")
 print("Current folders")
 
 provide_folders()
+for(i in 1:length(folders)){
+    print(get(folders[i]))
+}
 
 print("------------------------------------------------------------")
 
@@ -95,7 +98,7 @@ for(i in 1:nrow(df)){
 
 all_shells <- paste0("shell_cmd_",extract_letter(folders))
 df[df$broken_file,all_shells] <- NA
-
+df[199,]
 print("Done")
 
 n_broken <- sum(df$broken_file)
