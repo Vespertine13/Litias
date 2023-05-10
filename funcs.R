@@ -43,8 +43,8 @@ max_hash <- function(x){
     x[x == "missing"] <- NA
     table_x <- table(x)
     y <- names(table_x)[which.max(table_x)]
-    if(is.null(y)){return(NA)
-    }else{return(y)}
+    if(is.character(y)){return(y)
+    }else{return("missing")}
 }
 
 # takes row of hash and returns the count of the most common hash
@@ -52,8 +52,8 @@ n_max_hash <- function(x){
     x[x == "missing"] <- NA
     table_x <- table(x)
     y <- max(as.numeric(table_x))
-    if(is.null(y)){return(NA)
-    }else{return(y)}
+    if(is.numeric(y) & y > 0){return(y)
+    }else{return(0)}
 }
 
 # takes row of hash and returns TRUE if the file is new
@@ -66,7 +66,8 @@ check_new_file <- function(x){
 # that is: all files are present, but different
 # meaning that it is unknown which is like the original
 check_broken_file <- function(x){
-    if(sum(x == "missing") == 0 & n_max_hash(x) == 1){return(TRUE)
+    if(sum(x == "missing") == 0 & n_max_hash(x) <= 1){return(TRUE)
+    }else if(n_max_hash(x) == 0){return(TRUE)
     }else(return(FALSE))
 }
 
