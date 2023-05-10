@@ -33,7 +33,6 @@ create_df <- function(folder_a_path, folder_b_path, folder_c_path){
 # creates a folder variable with the folders given in config
 provide_folders <- function(){
     if(!("folders" %in% ls(envir=.GlobalEnv))){
-        print("creating variable folders")
         folders <<- ls(envir=.GlobalEnv)[grep(pattern = "folder_",ls(envir=.GlobalEnv))]
     }
 }
