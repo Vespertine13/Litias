@@ -106,14 +106,16 @@ plot_overview <- function(df){
                                    fill = as.factor(value))) +
             geom_tile() + 
             labs(x = "Folder", fill = "File OK") +
-            scale_fill_manual(values = c("red", "green"))
+            scale_fill_manual(values = c("red", "green")) +
+            scale_y_discrete(labels = NULL)
     }else{
         fig <- ggplot(plot_df, aes(x = variable,
                                    y = files,
                                    fill = as.factor(value))) +
             geom_tile() + 
             labs(x = "Folder", fill = "File OK") +
-            scale_fill_manual(values = c("green", "red"))
+            scale_fill_manual(values = c("green", "red")) +
+            scale_y_discrete(labels = NULL)
     }
     return(fig)
 }
