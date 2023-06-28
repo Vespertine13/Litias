@@ -6,6 +6,6 @@
 # folder_c <- "c:/folder_c/"
 
 # all
-folder_a <- "f:/folder_a/"
-folder_b <- "f:/folder_b/"
-folder_c <- "e:/folder_c/"
+folder_a <- "f:/folder_a/test_folder/"
+folder_b <- "f:/folder_b/test_folder/"
+folder_c <- "f:/folder_c/test_folder/"
