@@ -1,5 +1,5 @@
 # homogenic
-Scripts that verify file integrity given three redundant folders.
+Scripts that verify file integrity given three (or more) redundant folders.
 Runs CMD conmmands that should work in Windows (only).
 
 TODOS:
