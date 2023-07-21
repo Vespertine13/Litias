@@ -1,5 +1,5 @@
 # this R code can be used to check if files R alike
-print("-------------------------- Litias --------------------------")
+print("-------------------------- Homogenic --------------------------")
 
 print("Loading libraries...")
 suppressPackageStartupMessages(library(tidyverse))
