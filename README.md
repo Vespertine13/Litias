@@ -6,3 +6,4 @@ TODOS:
 - support for tilde ~ paths
 - write tests
 - documentation
+- log hash and compare in case of broken files.
