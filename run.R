@@ -8,5 +8,5 @@ source("main.R")
 # get plot of missing and decayed files
 plot_overview(plot_df)
 
-# run shell
+# run shell commands
 run_shells(df)
