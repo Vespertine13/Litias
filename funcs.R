@@ -76,7 +76,7 @@ fill_hash <- function(df,folders){
     counter <- 0
     for(i in 1:length(folders)){
         for(n in 1:nrow(df)){
-            df[[folders[i]]][n] <- try_compute_hash(paste0(get(folders[i]), df$files[n]))
+            df[[folders[i]]][n] <- try_compute_hash(paste0(get(folders[i]), "/", df$files[n]))
             counter <- counter + 1
             setTxtProgressBar(pb, counter)
         }
@@ -121,8 +121,12 @@ plot_overview <- function(df){
 }
 
 # takes character path to file or folder and converts it into a windows style path
-to_windows <- function(x){
-    return(str_replace_all(x, pattern = "/", replacement = "\\\\"))
+to_windows <- function(x, windows_os=FALSE){
+    if(windows_os){
+        return(str_replace_all(x, pattern = "/", replacement = "\\\\"))
+    }else{
+        return(x)
+    }
 }
 
 # runs all shells in shell columns (in variable all_shells)
@@ -136,10 +140,9 @@ run_shells  <- function(df){
             if(!is.na(df[[all_shells[n]]][i])){
                 current_dir <- df[[paste0("target_folder_", j)]][i]
                 if(!dir.exists(current_dir)){
-                    dirname_windows <- to_windows(current_dir)
-                    shell(glue('mkdir "{dirname_windows}"'))
+                    system(glue('mkdir -p "{current_dir}"'))
                 }
-                shell(df[[all_shells[n]]][i])
+                system(df[[all_shells[n]]][i])
             }
         }
     }
