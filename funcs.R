@@ -120,14 +120,6 @@ plot_overview <- function(df){
     return(fig)
 }
 
-# takes character path to file or folder and converts it into a windows style path
-to_windows <- function(x, windows_os=FALSE){
-    if(windows_os){
-        return(str_replace_all(x, pattern = "/", replacement = "\\\\"))
-    }else{
-        return(x)
-    }
-}
 
 # runs all shells in shell columns (in variable all_shells)
 # specifically it 
