@@ -6,6 +6,16 @@
 # folder_c <- "c:/folder_c/"
 
 # all
-folder_a <- "f:/folder_a/test_folder/"
-folder_b <- "f:/folder_b/test_folder/"
-folder_c <- "f:/folder_c/test_folder/"
+# note these folders need to follow the syntax folder_x and x should be a letter
+# folder_a <- "/media/eivind/Expansion/folder_a/test_folder"
+# folder_b <- "/media/eivind/Expansion/folder_b/test_folder"
+# folder_c <- "/media/eivind/Expansion/folder_c/test_folder"
+
+folder_a <- "/media/eivind/Expansion/folder_a"
+folder_b <- "/media/eivind/Expansion/folder_b"
+folder_c <- "/media/eivind/Expansion/folder_c"
+
+
+
+# OS
+windows_os = FALSE
