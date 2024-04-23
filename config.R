@@ -14,8 +14,3 @@
 folder_a <- "/media/eivind/Expansion/folder_a"
 folder_b <- "/media/eivind/Expansion/folder_b"
 folder_c <- "/media/eivind/Expansion/folder_c"
-
-
-
-# OS
-windows_os = FALSE
