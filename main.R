@@ -2,7 +2,7 @@
 print("-------------------------- Homogenic --------------------------")
 
 print("Loading libraries...")
-suppressPackageStartupMessages(library(tidyverse))
+library(ggplot2)
 library(digest)
 library(glue)
 library(reshape2)
@@ -58,7 +58,7 @@ df$new_file <- NA
 df$broken_file <- NA
 
 for(i in 1:nrow(df)){
-    hash_set <- df[i, folders] %>% as.character()
+    hash_set <- as.character(df[i, folders])
     df$max[i] <- max_hash(hash_set)
     df$n_max[i] <- n_max_hash(hash_set)
     df$new_file[i] <- check_new_file(hash_set)
